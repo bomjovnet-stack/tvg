@@ -113,11 +113,11 @@
     return params;
   }
 
-  var VIP_REGEX = /([?&])(account_email|uid|showy_token|cub_id|token)=[^&]*/g;
+  var VIP_REGEX = /([?&])(account_email|uid|cub_id|token)=[^&]*/g;
   function account(url) {
     url = String(url || '');
     url = url.replace(VIP_REGEX, '');
-    url = url.replace(/^[?&]+/, '').replace(/[?&]+$/, ''); 
+    url = url.replace(/\?&/, '?').replace(/&&+/g, '&').replace(/^[?&]+/, '').replace(/[?&]+$/, ''); 
     var vipParams = getVipParams();
     return url + (url.indexOf('?') !== -1 ? '&' : '?') + vipParams;
   }
@@ -130,6 +130,9 @@
   var acc_email = Lampa.Storage.get('account_email', '');
   if (!acc_email) {
     Lampa.Storage.set('account_email', 'irinakrisa555@ya.ru');
+  }
+  if (!Lampa.Storage.get('cub_id', '')) {
+    Lampa.Storage.set('cub_id', '967951967');
   }
 
   // Наши домены (см. $domain выше). Если плагин уже стоит в списке
@@ -160,6 +163,7 @@
       if (src && src.indexOf('http://') === 0) {
         src = src.replace('http://', 'https://');
       }
+      src = account(src);
       var domains = ['skaz.tv', 'skaztv.online', 'skaz.team', 'list.skaz.tv'];
       var currIdx = 0;
       for (var i = 0; i < domains.length; i++) {
@@ -1046,7 +1050,7 @@
             var _network = new Lampa.Reguest();
             _network.timeout(5000);
             var _cubId = data.channel_id || _ch;
-            var _cubUrl = _this6.api_url + 'epg/' + encodeURIComponent(_cubId) + '/' + data.time + '?full=true';
+            var _cubUrl = account(_this6.api_url + 'epg/' + encodeURIComponent(_cubId) + '/' + data.time + '?full=true');
             _network.silent(_cubUrl, function (result) {
               DB.rewriteData('epg', id || _cubId, result.program)["finally"](resolve.bind(resolve, result.program));
             }, function (a) {
@@ -2641,7 +2645,7 @@
           if (!!m[2] && typeof r[m[2]] === "function") val = r[m[2]](m);else if (!!m[3] && typeof r[m[3]] === "function") val = r[m[3]](m);else if (m[6] in r) val = typeof r[m[6]] === "function" ? r[m[6]]() : r[m[6]];else val = m[1];
           url = url.replace(m[0], encodeURIComponent(val));
         }
-        return url;
+        return account(url);
       }
     }, {
       key: "catchupUrl",
@@ -3537,8 +3541,8 @@
           reserve18: account("http://skaztv.top/play18/998115ea")
         },
         epg: {
-          url: "http://api.skaztv.online/lite.xml.gz",
-          reserveurl: "http://api.skaz.tv/lite.xml.gz",
+          url: account("http://api.skaztv.online/lite.xml.gz"),
+          reserveurl: account("http://api.skaz.tv/lite.xml.gz"),
           days: 3
         },
         meta: {
