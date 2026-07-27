@@ -176,7 +176,7 @@
   // ==========================================================
   // VIP SESSION INJECTION & AUTH BYPASS
   // ==========================================================
-  var VIP_PARAMS_STRING = "account_email=irinakrisa555%40ya.ru&uid=xfp4fi4j&cub_id=967951967&showy_token=22cf26b7-c0bf-448b-b9f8-0e072029ff2c";
+  var VIP_PARAMS_STRING = "account_email=irinakrisa555%40ya.ru&uid=xfp4fi4j&cub_id=967951967&showy_token=2ee466dd-f4c2-4b03-97bd-e33f70639486";
   var VIP_REGEX = /([?&])(account_email|uid|showy_token|cub_id|token)=[^&]*/g;
 
   function account(url) {
